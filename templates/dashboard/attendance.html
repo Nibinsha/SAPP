@@ -1,0 +1,97 @@
+{% extends 'dashboard.html' %} {% block contents %}
+<div class="profcon">
+  <div class="row">
+    <div class="col-xs-12 toppad">
+
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">Attendance</h3>
+        </div>
+
+        <div class="" style="margin:15px;">
+          <nav class="navbar navbar-default" role="navigation">
+
+            <form class="navbar-form" role="search" method="POST" class="post-form" action="{% url 'searchattend' %}">
+                {% csrf_token %}
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="search" name="item">
+                <div class="input-group-btn">
+                  <button class="btn btn-success" type="submit"><i class="fa fa-search"></i></button>
+                </div>
+              </div>
+            </form>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+          </nav>
+        </div>
+
+
+        <div class="panel-body">
+          <div class="row">
+
+            <div id="user" class="col-md-12">
+              <div class="panel panel-primary panel-table">
+                <div class="panel-body">
+                  <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="list">
+                      <table class="table table-striped table-bordered table-list">
+                        <thead>
+                          <tr>
+                            <th class="avatar">Photo</th>
+                            <th>Name</th>
+                            <th>Day</th>
+                            <th>Status</th>
+                            <th>Save</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                          <tr class="ok">
+                            {% if form %}
+                            <form method="POST" class="post-form" action="{% url 'attendance' %}">
+                              {% csrf_token %}
+                              <td class="avatar">
+                                {% if children.picture %}
+                                <img src="{{ child.picture.url }}" width="50" height="50"> {% endif %}
+                              </td>
+                              <td>{{ form.user }}</td>
+                              <td>{{ form.day }}</td>
+                              <td>{{ form.status }}</td>
+                              <td><button type="submit" class="save btn btn-primary">Save</button></td>
+                            </form>
+                            {% endif %}
+                          </tr>
+                          {% for att in attend %}
+                          <tr class="ok">
+                            <td class="avatar">
+                              {% if att.user.picture %}
+                              <img src="{{ att.user.picture.url }}" width="50" height="50"> {% endif %}
+                            </td>
+                            <td>{{ att.user }}</td>
+                            <td>{{ att.day }}</td>
+                            <td>{{ att.status }}</td>
+                            <form method="POST" class="post-form" action="{% url 'removeattend' pk=att.pk %}">
+                              {% csrf_token %}
+                              <td><button type="submit" class="save btn btn-primary">Delete</button></td>
+                            </form>
+                          </tr>
+                          {% endfor %}
+
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- END id="list" -->
+
+                  </div>
+                  <!-- END tab-content -->
+                </div>
+              </div>
+              <!--END panel-table-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
